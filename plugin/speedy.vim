@@ -7,6 +7,28 @@
 "				See the file LICENSE or <http://www.gnu.org/licenses/>.
 
 
+" Flag indicating whether Ctrl+LeftMouse should be the same as just LeftMouse
+" This is easy to hit accidentally when making blockwise character selections,
+" and can result in annoying error messages regarding tags.
+" NOTE: g<LeftMouse> is an alternative for the default Ctrl+Leftmouse behavior
+if !exists('g:speedy#DisableCtrlLeftMouse')
+	let g:speedy#DisableCtrlLeftMouse = 1
+endif
+if exists('g:speedy#DisableCtrlLeftMouse') && g:speedy#DisableCtrlLeftMouse
+	nmap <C-LeftMouse> <LeftMouse>
+	map  <C-LeftMouse> <LeftMouse>
+	imap <C-LeftMouse> <LeftMouse>
+	nmap <C-2-LeftMouse> <2-LeftMouse>
+	map  <C-2-LeftMouse> <2-LeftMouse>
+	imap <C-2-LeftMouse> <2-LeftMouse>
+	nmap <C-3-LeftMouse> <3-LeftMouse>
+	map  <C-3-LeftMouse> <3-LeftMouse>
+	imap <C-3-LeftMouse> <3-LeftMouse>
+	nmap <C-4-LeftMouse> <4-LeftMouse>
+	map  <C-4-LeftMouse> <4-LeftMouse>
+	imap <C-4-LeftMouse> <4-LeftMouse>
+endif
+
 " If shift is pressed, mouse selections are linewise
 snoremap <S-LeftMouse> <LeftMouse><Esc><S-V>
 snoremap <S-LeftDrag> <LeftDrag>
