@@ -5,6 +5,8 @@
 " License:      Copyright 2016 Brian Dellaterra. This file is part of Speedy.
 " 				Distributed under the terms of the GNU Lesser General Public License.
 "				See the file LICENSE or <http://www.gnu.org/licenses/>.
+" Attribution:  Inspired by Vim Tip #743 (Author: hari_vim)
+"               http://vim.wikia.com/wiki/Use_Alt-Mouse_to_select_blockwise
 
 
 " Flag indicating whether Ctrl+LeftMouse should be the same as just LeftMouse
