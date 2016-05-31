@@ -9,6 +9,13 @@
 "               http://vim.wikia.com/wiki/Use_Alt-Mouse_to_select_blockwise
 
 
+" Guard against repeat sourcing of this script
+if exists('g:loaded_speedyPlugin')
+	finish
+end
+let g:loaded_speedyPlugin = 1
+
+
 " Flag indicating whether Ctrl+LeftMouse should be the same as just LeftMouse
 " This is easy to hit accidentally when making blockwise character selections,
 " and can result in annoying error messages regarding tags.
@@ -32,20 +39,46 @@ if exists('g:speedy#DisableCtrlLeftMouse') && g:speedy#DisableCtrlLeftMouse
 endif
 
 " If shift is pressed, mouse selections are linewise
-snoremap <S-LeftMouse> <LeftMouse><Esc><S-V>
+snoremap <S-LeftMouse> <LeftMouse><Esc><S-v>
 snoremap <S-LeftDrag> <LeftDrag>
 snoremap <LeftMouse> <LeftMouse><Esc>
-inoremap <S-LeftMouse> <LeftMouse><Esc><S-V>
+inoremap <S-LeftMouse> <LeftMouse><Esc><S-v>
 inoremap <S-LeftDrag> <LeftDrag> 
-noremap <S-LeftMouse> <LeftMouse><S-V>
+noremap <S-LeftMouse> <LeftMouse><S-v>
 noremap <S-LeftDrag> <LeftDrag> 
 
 " If control is pressed, mouse selections are blockwise
-snoremap <C-LeftMouse> <LeftMouse><Esc><C-V>
+snoremap <C-LeftMouse> <LeftMouse><Esc><C-v>
 snoremap <C-LeftDrag> <LeftDrag>
 snoremap <LeftMouse> <LeftMouse><Esc>
-inoremap <C-LeftMouse> <LeftMouse><Esc><C-V>
+inoremap <C-LeftMouse> <LeftMouse><Esc><C-v>
 inoremap <C-LeftDrag> <LeftDrag> 
-noremap <C-LeftMouse> <LeftMouse><C-V>
+noremap <C-LeftMouse> <LeftMouse><C-v>
 noremap <C-LeftDrag> <LeftDrag> 
 
+" Alternative leader mapping to do the same thing as shift
+" (Some terminals have problems with the Shift modifier)
+smap <Leader><LeftMouse> <S-LeftMouse>
+imap <Leader><LeftMouse> <S-LeftMouse>
+map <Leader><LeftMouse> <S-LeftMouse>
+
+
+" Helper function to cycle through visual modes
+" visualMode - passed directly from mapping via the visualmode() function
+" selectMode - set to 1 if calling from a select mode mapping
+function! <SID>CycleVisualMode( visualMode, ... )
+	let selectMode = get( a:000, 0, 0 )
+	let modeSwitch = selectMode ? "\<C-g>" : ''    " to restore select mode
+    " NOTE: ==# is like == but case-sensitive
+    if a:visualMode ==# 'v'
+		exe "normal gvV" . modeSwitch
+    elseif a:visualMode ==# 'V'
+		exe "normal gv\<C-v>" . modeSwitch
+    else " <CTRL-V>
+		exe "normal gvv" . modeSwitch
+    endif
+endfunction
+
+vnoremap  <silent> <Tab> <C-\><C-n>:call <SID>CycleVisualMode(visualmode())<CR>
+snoremap  <silent> <Tab> <C-\><C-n>:call <SID>CycleVisualMode(visualmode(), 1)<CR>
+" snoremenu <silent> 5.1000 &Easy.&Paste<Tab>Ctrl+v <C-o>:<C-u>:let g:VisualMode = visualmode() \| call <SID>VisualModePasteFix()<CR>:exe 'normal gv"+g' . g:VisualModePaste<CR><C-o>:call <SID>PasteFix()<CR><C-o>:unlet g:VisualMode<CR><C-\><C-n>`.<C-\><C-n>a
