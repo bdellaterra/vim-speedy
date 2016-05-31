@@ -15,6 +15,34 @@ if exists('g:loaded_speedyPlugin')
 end
 let g:loaded_speedyPlugin = 1
 
+" Keymap for switching through characterwise, linewise, and blockwise
+" visual seletion modes
+if !exists('g:speedy#visualModeSwitch')
+    let g:speedy#visualModeSwitch = '<Tab>'
+endif
+
+" Helper function to cycle through visual modes
+" visualMode - passed directly from mapping via the visualmode() function
+" selectMode - set to 1 if calling from a select mode mapping
+function! <SID>CycleVisualMode( visualMode, ... )
+	let selectMode = get( a:000, 0, 0 )
+	let modeSwitch = selectMode ? "\<C-g>" : ''    " to restore select mode
+    " NOTE: ==# is like == but case-sensitive
+    if a:visualMode ==# 'v'
+		exe "normal gvV" . modeSwitch
+    elseif a:visualMode ==# 'V'
+		exe "normal gv\<C-v>" . modeSwitch
+    else " <CTRL-V>
+		exe "normal gvv" . modeSwitch
+    endif
+endfunction
+
+" Map the switch to cycle through visual modes
+exe 'vnoremap  <silent> ' . g:speedy#visualModeSwitch
+		\ . ' <C-\><C-n>:call <SID>CycleVisualMode(visualmode())<CR>'
+exe 'snoremap  <silent> ' . g:speedy#visualModeSwitch
+		\ . ' <C-\><C-n>:call <SID>CycleVisualMode(visualmode(), 1)<CR>'
+
 
 " Flag indicating whether Ctrl+LeftMouse should be the same as just LeftMouse
 " This is easy to hit accidentally when making blockwise character selections,
@@ -62,23 +90,3 @@ smap <Leader><LeftMouse> <S-LeftMouse>
 imap <Leader><LeftMouse> <S-LeftMouse>
 map <Leader><LeftMouse> <S-LeftMouse>
 
-
-" Helper function to cycle through visual modes
-" visualMode - passed directly from mapping via the visualmode() function
-" selectMode - set to 1 if calling from a select mode mapping
-function! <SID>CycleVisualMode( visualMode, ... )
-	let selectMode = get( a:000, 0, 0 )
-	let modeSwitch = selectMode ? "\<C-g>" : ''    " to restore select mode
-    " NOTE: ==# is like == but case-sensitive
-    if a:visualMode ==# 'v'
-		exe "normal gvV" . modeSwitch
-    elseif a:visualMode ==# 'V'
-		exe "normal gv\<C-v>" . modeSwitch
-    else " <CTRL-V>
-		exe "normal gvv" . modeSwitch
-    endif
-endfunction
-
-vnoremap  <silent> <Tab> <C-\><C-n>:call <SID>CycleVisualMode(visualmode())<CR>
-snoremap  <silent> <Tab> <C-\><C-n>:call <SID>CycleVisualMode(visualmode(), 1)<CR>
-" snoremenu <silent> 5.1000 &Easy.&Paste<Tab>Ctrl+v <C-o>:<C-u>:let g:VisualMode = visualmode() \| call <SID>VisualModePasteFix()<CR>:exe 'normal gv"+g' . g:VisualModePaste<CR><C-o>:call <SID>PasteFix()<CR><C-o>:unlet g:VisualMode<CR><C-\><C-n>`.<C-\><C-n>a
