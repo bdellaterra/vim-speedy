@@ -10,10 +10,10 @@
 
 
 " Guard against repeat sourcing of this script
-if exists('g:loaded_speedy')
+if exists('g:loaded_speedyPlugin')
     finish
 end
-let g:loaded_speedy = 1
+let g:loaded_speedyPlugin = 1
 
 " Keymap for switching through characterwise, linewise, and blockwise
 " visual seletion modes
