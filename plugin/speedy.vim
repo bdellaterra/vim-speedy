@@ -10,10 +10,10 @@
 
 
 " Guard against repeat sourcing of this script
-if exists('g:loaded_speedyPlugin')
+if exists('g:loaded_speedy')
     finish
 end
-let g:loaded_speedyPlugin = 1
+let g:loaded_speedy = 1
 
 " Keymap for switching through characterwise, linewise, and blockwise
 " visual seletion modes
@@ -22,7 +22,7 @@ if !exists('g:speedy#visualModeSwitch')
 endif
 
 " Helper function to cycle through visual modes
-" visualMode - passed directly from mapping via the visualmode() function
+" visualMode - pass directly from mapping via the visualmode() function
 " selectMode - set to 1 if calling from a select mode mapping
 function! <SID>CycleVisualMode( visualMode, ... )
     let selectMode = get( a:000, 0, 0 )
@@ -37,7 +37,7 @@ function! <SID>CycleVisualMode( visualMode, ... )
     endif
 endfunction
 
-" Map the switch to cycle through visual modes
+" Map the switch that cycles through visual modes
 exe 'vnoremap  <silent> ' . g:speedy#visualModeSwitch
             \ . ' <C-\><C-n>:call <SID>CycleVisualMode(visualmode())<CR>'
 exe 'snoremap  <silent> ' . g:speedy#visualModeSwitch
