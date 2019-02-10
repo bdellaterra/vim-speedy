@@ -1,10 +1,11 @@
 " File:         speedy.vim
 " Description:  Fast characterwise, linewise, and blockwise mouse selections
 " Author:       Brian Dellatera <github.com/bdellaterra>
-" Version:      0.1.1
-" License:      Copyright 2016 Brian Dellaterra. This file is part of Speedy.
-"               Distributed under the terms of the GNU Lesser General Public License.
-"               See the file LICENSE or <http://www.gnu.org/licenses/>.
+" Version:      0.1.2
+" License:      Copyright 2016-2019 Brian Dellaterra.
+"               This file is part of Speedy.
+"               Distributed under the terms of the GNU Lesser General Public
+"               License. See the file LICENSE or <http://www.gnu.org/licenses/>.
 " Attribution:  Inspired by Vim Tip #743 (Author: hari_vim)
 "               http://vim.wikia.com/wiki/Use_Alt-Mouse_to_select_blockwise
 
@@ -32,7 +33,7 @@ function! <SID>CycleVisualMode( visualMode, ... )
         exe "normal gvV" . modeSwitch
     elseif a:visualMode ==# 'V'
         exe "normal gv\<C-v>" . modeSwitch
-    else " <CTRL-V>
+    else " <Ctrl-V>
         exe "normal gvv" . modeSwitch
     endif
 endfunction
@@ -46,15 +47,15 @@ exe 'snoremap  <silent> ' . g:speedy#visualModeSwitch
 
 " Flag indicating whether Ctrl+LeftMouse should be the same as just LeftMouse
 " This is easy to hit accidentally when making blockwise character selections,
-" and can result in annoying error messages regarding tags.
+" and can result in error messages regarding tags.
 " NOTE: g<LeftMouse> is an alternative for the default Ctrl+Leftmouse behavior
 if !exists('g:speedy#DisableCtrlLeftMouse')
     let g:speedy#DisableCtrlLeftMouse = 1
 endif
 if exists('g:speedy#DisableCtrlLeftMouse') && g:speedy#DisableCtrlLeftMouse
-    nmap <C-LeftMouse> <LeftMouse>
-    map  <C-LeftMouse> <LeftMouse>
-    imap <C-LeftMouse> <LeftMouse>
+    nmap <C-LeftMouse>   <LeftMouse>
+    map  <C-LeftMouse>   <LeftMouse>
+    imap <C-LeftMouse>   <LeftMouse>
     nmap <C-2-LeftMouse> <2-LeftMouse>
     map  <C-2-LeftMouse> <2-LeftMouse>
     imap <C-2-LeftMouse> <2-LeftMouse>
@@ -66,27 +67,31 @@ if exists('g:speedy#DisableCtrlLeftMouse') && g:speedy#DisableCtrlLeftMouse
     imap <C-4-LeftMouse> <4-LeftMouse>
 endif
 
+" Click and drag with right mouse button for linewise selection
+inoremap <RightMouse> <LeftMouse><Esc><S-v>
+inoremap <RightDrag>  <LeftDrag> 
+noremap  <RightMouse> <LeftMouse><S-v>
+noremap  <RightDrag>  <LeftDrag> 
+xnoremap <RightMouse> <RightMouse>
+xnoremap <RightDrag>  <RightMouse>
+
 " If shift is pressed, mouse selections are linewise
+" NOTE: Some terminals have problems with the Shift modifier
 snoremap <S-LeftMouse> <LeftMouse><Esc><S-v>
-snoremap <S-LeftDrag> <LeftDrag>
-snoremap <LeftMouse> <LeftMouse><Esc>
+snoremap <S-LeftDrag>  <LeftDrag>
 inoremap <S-LeftMouse> <LeftMouse><Esc><S-v>
-inoremap <S-LeftDrag> <LeftDrag> 
-noremap <S-LeftMouse> <LeftMouse><S-v>
-noremap <S-LeftDrag> <LeftDrag> 
+inoremap <S-LeftDrag>  <LeftDrag> 
+noremap  <S-LeftMouse> <LeftMouse><S-v>
+noremap  <S-LeftDrag>  <LeftDrag> 
 
 " If control is pressed, mouse selections are blockwise
 snoremap <C-LeftMouse> <LeftMouse><Esc><C-v>
-snoremap <C-LeftDrag> <LeftDrag>
-snoremap <LeftMouse> <LeftMouse><Esc>
+snoremap <C-LeftDrag>  <LeftDrag>
 inoremap <C-LeftMouse> <LeftMouse><Esc><C-v>
-inoremap <C-LeftDrag> <LeftDrag> 
-noremap <C-LeftMouse> <LeftMouse><C-v>
-noremap <C-LeftDrag> <LeftDrag> 
+inoremap <C-LeftDrag>  <LeftDrag> 
+noremap  <C-LeftMouse> <LeftMouse><C-v>
+noremap  <C-LeftDrag>  <LeftDrag> 
 
-" Alternative leader mapping to do the same thing as shift
-" (Some terminals have problems with the Shift modifier)
-smap <Leader><LeftMouse> <S-LeftMouse>
-imap <Leader><LeftMouse> <S-LeftMouse>
-map <Leader><LeftMouse> <S-LeftMouse>
+" Cancel selection
+snoremap <LeftMouse> <LeftMouse><Esc>
 
